@@ -38,6 +38,22 @@ class Database {
         const cadastrou = await this.escreverArquivo(dadosFinal)
         return cadastrou;
     }
+
+    async remover(id) {
+        if (!id) {
+            return await this.escreverArquivo([])
+        }
+
+        const dados = await this.obterDadosArquivo()
+        const indice = dados.findIndex(item => item.id === parseInt(id))
+        if (indice === -1) {
+            throw Error('O usuário não foi encontrado!')
+        }
+
+        dados.splice(indice, 1)
+
+        return this.escreverArquivo(dados)
+    }
 }
 
 module.exports = new Database()
