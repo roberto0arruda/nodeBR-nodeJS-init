@@ -28,4 +28,16 @@ describe('Postgres Strategy', function () {
 
         assert.deepEqual(result, MOCK_HEROI_CADASTRAR)
     })
+
+    it('Atualizar', async function () {
+        const [baseHeroi] = await contextPostgres.read({ nome: MOCK_HEROI_CADASTRAR.nome })
+        const heroiAtualizado = {
+            ...baseHeroi,
+            nome: 'Goku',
+            poder: 'Deus'
+        }
+        delete heroiAtualizado.id
+        const [result] = await contextPostgres.update(baseHeroi.id, heroiAtualizado)
+        assert.deepEqual(result, 1)
+    })
 })
