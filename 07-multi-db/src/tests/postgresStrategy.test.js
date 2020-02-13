@@ -40,4 +40,10 @@ describe('Postgres Strategy', function () {
         const [result] = await contextPostgres.update(baseHeroi.id, heroiAtualizado)
         assert.deepEqual(result, 1)
     })
+
+    it('Deletar pelo id', async function () {
+        const [item] = await contextPostgres.read({})
+        const result = await contextPostgres.delete(item.id)
+        assert.deepEqual(result, 1)
+    })
 })
