@@ -20,7 +20,7 @@ class Postgres extends ICrud {
     }
 
     async defineModel() {
-        this._herois = driver.define('herois', {
+        this._herois = this._driver.define('herois', {
             id: {
                 type: Sequelize.INTEGER,
                 required: true,
@@ -40,11 +40,12 @@ class Postgres extends ICrud {
             freezeTableName: false,
             timestamps: false
         })
-        await Herois.sync()
+        // await Herois.sync()
     }
 
-    create(item) {
-        console.log('O item foi salvo em PostgresBD')
+    async create(item) {
+        const { dataValues } = await this._herois.create(item)
+        return dataValues
     }
 
     _connect() {
@@ -58,6 +59,7 @@ class Postgres extends ICrud {
                 quoteIdentifiers: false
             }
         )
+        this.defineModel()
     }
 }
 
