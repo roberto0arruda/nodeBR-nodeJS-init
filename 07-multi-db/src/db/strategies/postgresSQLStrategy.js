@@ -1,11 +1,11 @@
-const ICrud = require('./interfaces/interfaceCrud')
+const ICrud = require('./base/interfaceDB')
 const Sequelize = require('sequelize')
 
 class Postgres extends ICrud {
     constructor() {
         super()
         this._driver = null
-        this._herois = null
+        this._heroes = null
         this._connect()
     }
 
@@ -20,7 +20,7 @@ class Postgres extends ICrud {
     }
 
     async defineModel() {
-        this._herois = this._driver.define('herois', {
+        this._heroes = this._driver.define('heroes', {
             id: {
                 type: Sequelize.INTEGER,
                 required: true,
@@ -36,7 +36,7 @@ class Postgres extends ICrud {
                 required: true
             }
         }, {
-            tableName: 'TB_HEROIS',
+            tableName: 'TB_HEROES',
             freezeTableName: false,
             timestamps: false
         })
@@ -44,21 +44,21 @@ class Postgres extends ICrud {
     }
 
     async create(item) {
-        const { dataValues } = await this._herois.create(item)
+        const { dataValues } = await this._heroes.create(item)
         return dataValues
     }
 
     async read(item = {}) {
-        return this._herois.findAll({ where: item, raw: true })
+        return this._heroes.findAll({ where: item, raw: true })
     }
 
     async update(id, item) {
-        return this._herois.update(item, { where: { id } })
+        return this._heroes.update(item, { where: { id } })
     }
 
     async delete(id) {
         const query = id ? { id } : {}
-        return this._herois.destroy({ where: query })
+        return this._heroes.destroy({ where: query })
     }
 
     _connect() {

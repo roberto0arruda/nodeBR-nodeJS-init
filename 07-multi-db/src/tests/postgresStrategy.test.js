@@ -1,8 +1,8 @@
 const assert = require('assert')
-const Postgres = require('../db/strategies/postgres')
+const postgresSQLStrategy = require('../db/strategies/postgresSQLStrategy')
 const contextStrategy = require('../db/strategies/base/contextStrategy')
 
-const contextPostgres = new contextStrategy(new Postgres())
+const contextPostgres = new contextStrategy(new postgresSQLStrategy())
 const MOCK_HEROI_CADASTRAR = {
     nome: 'Gavião',
     poder: 'Flexas'
@@ -10,6 +10,10 @@ const MOCK_HEROI_CADASTRAR = {
 
 describe('Postgres Strategy', function () {
     this.timeout(Infinity)
+    this.beforeAll(async function () {
+        await contextPostgres.delete()
+    })
+
     it('Postgres Connection', async function () {
         const result = await contextPostgres.isConnected()
         assert.equal(result, true)
