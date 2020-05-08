@@ -22,7 +22,7 @@ class ContextStrategy extends ICrud {
         return this._databse.delete(id)
     }
 
-    connect() {
+    static connect() {
         return this._databse.connect()
     }
 
