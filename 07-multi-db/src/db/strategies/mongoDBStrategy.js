@@ -56,10 +56,23 @@ class MongoDB extends ICrud {
         const connection = Mongoose.connection
         connection.once('open', () => console.log('database rodando!'))
         this._driver = connection
+        this.defineModel()
     }
 
     create(item) {
-        console.log('O item foi salvo em MongoDB')
+        return this._heroes.create(item)
+    }
+
+    read(item, skip = 0, limit = 10) {
+        return this._heroes.find(item).skip(skip).limit(limit)
+    }
+
+    update(id, item) {
+        return this._heroes.updateOne({ _id: id }, { $set: item })
+    }
+
+    delete(id) {
+        return this._heroes.deleteOne({ _id: id })
     }
 }
 
