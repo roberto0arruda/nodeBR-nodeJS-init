@@ -1,12 +1,14 @@
-## Lista de comandos Docker
+# Módulo 5 - Bancos de Dados - Nosso projeto Multi-banco de dados
 
-### DATABASES
+* Trabalhando com o padrão Strategy para Multi DataSources
+
+## Instalando docker para usar o Postgres e MongoDB
 
 ---
 
-#### POSTGRES
+### POSTGRES
 
-``` docker
+``` shell
 docker run \
     --name postgres \
     -e POSTGRES_USER=roberto \
@@ -16,7 +18,7 @@ docker run \
     -d postgres
 ```
 
-``` docker
+``` shell
 docker run \
     --name adminer \
     -p 8000:8080 \
@@ -24,11 +26,21 @@ docker run \
     -d adminer
 ```
 
+``` shell
+docker run -it \
+ -p 5432:5432 \
+ --link postgres:postgres \
+ postgres psql -h $HOST -p $PORT -U $USER $DATABASE
+
+```
+
+* Go to `http://localhost:8000/?pgsql=postgres&username=roberto&db=heroes&ns=public` 
+
 ---
 
 #### MONGODB
 
-``` docker
+``` shell
 docker run \
     --name mongodb \
     -p 27017:27017 \
@@ -37,7 +49,7 @@ docker run \
     -d mongo:4
 ```
 
-``` docker
+``` shell
 docker run \
     --name mongoclient \
     -p 3000:3000 \
@@ -45,10 +57,10 @@ docker run \
     -d mongoclient/mongoclient
 ```
 
-``` docker
+``` shell
 docker exec -it mongodb \
     mongo --host localhost -u admin -p senhaadmin --authenticationDatabase admin \
     --eval "db.getSiblingDB('heroes').createUser({user: 'roberto', pwd: 'minhasenhasecreta', roles: [{role: 'readWrite', db: 'heroes'}]})"
- ```
+```
 
 ---
