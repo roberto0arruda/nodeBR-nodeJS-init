@@ -1,7 +1,7 @@
 const assert = require('assert')
 const api = require('../api')
 let app = {}
-describe('Suite de Testes da API Heroes', function () {
+describe.only('Suite de Testes da API Heroes', function () {
     this.beforeAll(async () => {
         app = await api
     })
@@ -9,7 +9,7 @@ describe('Suite de Testes da API Heroes', function () {
     it('Listar /heroes', async () => {
         const result = await app.inject({
             method: 'GET',
-            url: '/heroes?skip=0&limit=10'
+            url: '/heroes'
         })
 
         const dados = JSON.parse(result.payload)
@@ -40,7 +40,15 @@ describe('Suite de Testes da API Heroes', function () {
             url: `/heroes?skip=0&limit=${TAMANHO_LIMIT}`
         })
 
-        assert.deepEqual(result.payload, 'Erro interno no servidor')
+        const errorResult = {
+            "statusCode": 400,
+            "error": "Bad Request",
+            "message": "child \"limit\" fails because [\"limit\" must be a number]",
+            "validation": { "source": "query", "keys": ["limit"] }
+        }
+
+        assert.deepEqual(result.statusCode, 400)
+        assert.deepEqual(result.payload, JSON.stringify(errorResult))
     })
 
     it('Listar /heroes - deve filtrar um item', async () => {
