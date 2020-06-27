@@ -1,5 +1,7 @@
 const BaseRoute = require('./base/baseRoute')
 const Joi = require('joi')
+const Boom = require('boom')
+const { boomify } = require('boom')
 
 const failAction = (request, h, erro) => {
     throw erro
@@ -42,7 +44,7 @@ class HeroRoutes extends BaseRoute {
                     return this.db.read(nome ? query : {}, skip, limit)
                 } catch (error) {
                     console.log('DEU RUIM', error)
-                    return 'Erro interno no servidor'
+                    return Boom.internal()
                 }
             }
         }
@@ -72,7 +74,7 @@ class HeroRoutes extends BaseRoute {
                     }
                 } catch (error) {
                     console.log('DEU RUIM!', error)
-                    return 'Internal Error!'
+                    return Boom.internal()
                 }
             }
         }
@@ -84,6 +86,7 @@ class HeroRoutes extends BaseRoute {
             path: '/heroes/{id}',
             config: {
                 validate: {
+                    failAction,
                     params: {
                         id: Joi.string().required()
                     },
@@ -103,9 +106,7 @@ class HeroRoutes extends BaseRoute {
 
                     const result = await this.db.update(id, dados)
 
-                    if (result.nModified !== 1) return {
-                        message: 'Não foi possivel atualizar!'
-                    }
+                    if (result.nModified !== 1) return Boom.preconditionFailed('Não foi possivel atualizar!')
 
                     return {
                         message: 'Heroi atualizado com sucesso!'
@@ -113,11 +114,43 @@ class HeroRoutes extends BaseRoute {
 
                 } catch (error) {
                     console.log('DEU RUIM', error)
+                    return Boom.internal()
                 }
             }
         }
     }
 
+    delete () {
+        return {
+            method: 'DELETE',
+            path: '/heroes/{id}',
+            config: {
+                validate: {
+                    failAction,
+                    params: {
+                        id: Joi.string().required()
+                    }
+                }
+            },
+            handler: async (request) => {
+                try {
+                    const { id } = request.params
+
+                    const result = await this.db.delete(id)
+
+                    if (result.n !== 1) return Boom.preconditionFailed('Não foi possivel remover item!')
+
+                    return {
+                        message: 'Heroi removido com sucesso!'
+                    }
+
+                } catch (error) {
+                    console.log('DEU RUIM', error)
+                    return Boom.internal()
+                }
+            }
+        }
+    }
 
 }
 
