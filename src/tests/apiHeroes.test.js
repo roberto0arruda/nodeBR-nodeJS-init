@@ -121,18 +121,60 @@ describe.only('Suite de Testes da API Heroes', function () {
 
     it('Atualizar PATCH - /heroes/:id - não deve atualizar com ID incorreto', async () => {
         const _id = `5ef75aa26e45a359635e1101`
-        const expected = {
-            poder: 'Super Mira'
-        }
+
         const result = await app.inject({
             method: 'PATCH',
             url: `/heroes/${_id}`,
-            payload: expected
+            payload: {
+                poder: 'Super Mira'
+            }
+        })
+
+        const expected = { statusCode: 412, error: "Precondition Failed", message: "Não foi possivel atualizar!" }
+
+        assert.ok(result.statusCode === 412)
+        assert.deepEqual(JSON.parse(result.payload), expected)
+    })
+
+    it('Remover DELETE - /heroes/:id - deve remover o heroi pelo ID', async () => {
+        const _id = MOCK_ID
+
+        const result = await app.inject({
+            method: 'DELETE',
+            url: `/heroes/${_id}`
         })
 
         const { message } = JSON.parse(result.payload)
 
         assert.ok(result.statusCode === 200)
-        assert.deepEqual(message, 'Não foi possivel atualizar!')
+        assert.deepEqual(message, 'Heroi removido com sucesso!')
+    })
+
+    it('Remover DELETE - /heroes/:id - não deve remover o heroi', async () => {
+        const _id = `5ef75aa26e45a359635e1101`
+
+        const result = await app.inject({
+            method: 'DELETE',
+            url: `/heroes/${_id}`
+        })
+
+        const expected = { statusCode: 412, error: "Precondition Failed", message: "Não foi possivel remover item!" }
+
+        assert.ok(result.statusCode === 412)
+        assert.deepEqual(JSON.parse(result.payload), expected)
+    })
+
+    it('Remover DELETE - /heroes/:id - não deve remover com ID invalido', async () => {
+        const _id = `ID_INVALIDO`
+
+        const result = await app.inject({
+            method: 'DELETE',
+            url: `/heroes/${_id}`
+        })
+
+        const expected = { statusCode: 500, error: "Internal Server Error", message: "An internal server error occurred" }
+
+        assert.ok(result.statusCode === 500)
+        assert.deepEqual(JSON.parse(result.payload), expected)
     })
 })
