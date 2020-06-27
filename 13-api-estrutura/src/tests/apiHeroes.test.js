@@ -1,6 +1,12 @@
 const assert = require('assert')
 const api = require('../api')
 let app = {}
+
+const MOCK_HEROI_CADASTRAR = {
+    nome: 'Chapolin Colorado',
+    poder: 'Marreta Bionica'
+}
+
 describe.only('Suite de Testes da API Heroes', function () {
     this.beforeAll(async () => {
         app = await api
@@ -51,7 +57,7 @@ describe.only('Suite de Testes da API Heroes', function () {
         assert.deepEqual(result.payload, JSON.stringify(errorResult))
     })
 
-    it('Listar /heroes - deve filtrar um item', async () => {
+    it('Listar GET - /heroes - deve filtrar um item', async () => {
         const TAMANHO_LIMIT = 100
         const NAME = 'flash'
         const result = await app.inject({
@@ -64,5 +70,19 @@ describe.only('Suite de Testes da API Heroes', function () {
 
         assert.deepEqual(statusCode, 200)
         assert.ok(dados[0].nome === NAME)
+    })
+
+    it('Cadastrar POST - /heroes - deve cadastrar um item', async () => {
+        const result = await app.inject({
+            method: 'POST',
+            url: '/heroes',
+            payload: MOCK_HEROI_CADASTRAR
+        })
+
+        const { message, _id } = JSON.parse(result.payload)
+
+        assert.ok(result.statusCode === 200)
+        assert.notStrictEqual(_id, undefined)
+        assert.deepEqual(message, 'Heroi Cadastrado com sucesso!')
     })
 })
