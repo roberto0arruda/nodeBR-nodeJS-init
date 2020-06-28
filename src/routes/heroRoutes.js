@@ -18,6 +18,9 @@ class HeroRoutes extends BaseRoute {
             method: 'GET',
             path: '/heroes',
             config: {
+                tags: ['api'],
+                description: 'Deve listar herois',
+                notes: 'pode paginar resultados e filtrar por nome',
                 validate: {
                     // payload -> body
                     // headers -> header
@@ -43,7 +46,6 @@ class HeroRoutes extends BaseRoute {
 
                     return this.db.read(nome ? query : {}, skip, limit)
                 } catch (error) {
-                    console.log('DEU RUIM', error)
                     return Boom.internal()
                 }
             }
@@ -55,6 +57,9 @@ class HeroRoutes extends BaseRoute {
             method: 'POST',
             path: '/heroes',
             config: {
+                tags: ['api'],
+                description: 'Deve cadastrar heroi',
+                notes: 'pode cadastrar um heroi com nome  poder',
                 validate: {
                     failAction,
                     payload: {
@@ -73,7 +78,6 @@ class HeroRoutes extends BaseRoute {
                         _id: result._id
                     }
                 } catch (error) {
-                    console.log('DEU RUIM!', error)
                     return Boom.internal()
                 }
             }
@@ -85,6 +89,9 @@ class HeroRoutes extends BaseRoute {
             method: 'PATCH',
             path: '/heroes/{id}',
             config: {
+                tags: ['api'],
+                description: 'Deve atualizar um heroi pelo id',
+                notes: 'pode atuaizar qualquer campo',
                 validate: {
                     failAction,
                     params: {
@@ -113,7 +120,6 @@ class HeroRoutes extends BaseRoute {
                     }
 
                 } catch (error) {
-                    console.log('DEU RUIM', error)
                     return Boom.internal()
                 }
             }
@@ -125,6 +131,9 @@ class HeroRoutes extends BaseRoute {
             method: 'DELETE',
             path: '/heroes/{id}',
             config: {
+                tags: ['api'],
+                description: 'Deve deletar um heroi pelo id',
+                notes: 'pode deletar heroi',
                 validate: {
                     failAction,
                     params: {
@@ -145,13 +154,11 @@ class HeroRoutes extends BaseRoute {
                     }
 
                 } catch (error) {
-                    console.log('DEU RUIM', error)
                     return Boom.internal()
                 }
             }
         }
     }
-
 }
 
 module.exports = HeroRoutes
