@@ -14,7 +14,7 @@ const MOCK_HEROI_INICIAL = {
 
 let MOCK_ID = ''
 
-describe.only('Suite de Testes da API Heroes', function () {
+describe('Suite de Testes da API Heroes com MongoDB', function () {
     this.beforeAll(async () => {
         app = await api
 
@@ -41,8 +41,8 @@ describe.only('Suite de Testes da API Heroes', function () {
         assert.ok(Array.isArray(dados))
     })
 
-    it('Listar /heroes - Deve retornar 5 registros', async () => {
-        const TAMANHO_LIMIT = 5
+    it('Listar /heroes - Deve retornar 3 registros', async () => {
+        const TAMANHO_LIMIT = 3
         const result = await app.inject({
             method: 'GET',
             url: `/heroes?skip=0&limit=${TAMANHO_LIMIT}`
@@ -74,8 +74,8 @@ describe.only('Suite de Testes da API Heroes', function () {
     })
 
     it('Listar GET - /heroes - deve filtrar um item', async () => {
-        const TAMANHO_LIMIT = 100
-        const NAME = 'flash'
+        const TAMANHO_LIMIT = 10
+        const NAME = 'Gavião Negro'
         const result = await app.inject({
             method: 'GET',
             url: `/heroes?skip=0&limit=${TAMANHO_LIMIT}&nome=${NAME}`
@@ -150,7 +150,7 @@ describe.only('Suite de Testes da API Heroes', function () {
         assert.deepEqual(message, 'Heroi removido com sucesso!')
     })
 
-    it('Remover DELETE - /heroes/:id - não deve remover o heroi', async () => {
+    it('Remover DELETE - /heroes/:id - não deve remover o heroi, id não encontrado', async () => {
         const _id = `5ef75aa26e45a359635e1101`
 
         const result = await app.inject({
