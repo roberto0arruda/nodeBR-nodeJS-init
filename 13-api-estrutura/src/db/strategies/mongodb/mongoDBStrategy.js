@@ -1,10 +1,10 @@
 const ICrud = require('./../base/interfaceDB')
 const Mongoose = require('mongoose')
 const STATUS = {
-    0: 'Disconectado',
+    0: 'Desconectado',
     1: 'Conectado',
     2: 'Conectando',
-    3: 'Discoctando',
+    3: 'Desconectando',
 }
 
 class MongoDB extends ICrud {
@@ -36,7 +36,7 @@ class MongoDB extends ICrud {
 
         const connection = Mongoose.connection
 
-        return connection.once('open', () => console.log('database rodando!'))
+        return connection.once('open', () => console.log('MONGO DB database rodando!'))
     }
 
     create(item) {
