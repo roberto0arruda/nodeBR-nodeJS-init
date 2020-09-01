@@ -2,9 +2,9 @@ const ICrud = require('./../base/interfaceDB')
 const Sequelize = require('sequelize')
 
 class Postgres extends ICrud {
-    constructor(connetion, scheme) {
+    constructor(connection, scheme) {
         super()
-        this._connection = connetion
+        this._connection = connection
         this._schema = scheme
     }
 
@@ -18,8 +18,8 @@ class Postgres extends ICrud {
         }
     }
 
-    static async defineModel(connetion, schema) {
-        const model = connetion.define(schema.name, schema.schema, schema.options)
+    static async defineModel(connection, schema) {
+        const model = connection.define(schema.name, schema.schema, schema.options)
         await model.sync()
         return model
     }

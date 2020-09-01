@@ -17,7 +17,7 @@ let MOCK_HEROI_ID = ''
 
 let contextMongo = {}
 
-describe('Mongo Suite de Testes', function () {
+describe('MongoDB Suite de Testes', function () {
     this.beforeAll(async () => {
         const connection = MongoDBStrategy.connect()
         contextMongo = new contextStrategy(new MongoDBStrategy(connection, HeroiSchema))

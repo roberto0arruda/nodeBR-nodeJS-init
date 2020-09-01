@@ -1,11 +1,14 @@
 const BaseRoute = require('./base/baseRoute')
 const Joi = require('joi')
 const Boom = require('boom')
-const { boomify } = require('boom')
 
 const failAction = (request, h, erro) => {
     throw erro
 }
+
+const headers = Joi.object({
+    authorization: Joi.string().required()
+}).unknown()
 
 class HeroRoutes extends BaseRoute {
     constructor(db) {
@@ -27,6 +30,7 @@ class HeroRoutes extends BaseRoute {
                     // params -> na URL :id
                     // query -> ?skip=3&limit=10
                     failAction,
+                    headers,
                     query: {
                         skip: Joi.number().integer().default(0),
                         limit: Joi.number().integer().default(10),
@@ -62,6 +66,7 @@ class HeroRoutes extends BaseRoute {
                 notes: 'pode cadastrar um heroi com nome  poder',
                 validate: {
                     failAction,
+                    headers,
                     payload: {
                         nome: Joi.string().required().min(3).max(100),
                         poder: Joi.string().required().min(3).max(100)
@@ -94,6 +99,7 @@ class HeroRoutes extends BaseRoute {
                 notes: 'pode atuaizar qualquer campo',
                 validate: {
                     failAction,
+                    headers,
                     params: {
                         id: Joi.string().required()
                     },
@@ -136,6 +142,7 @@ class HeroRoutes extends BaseRoute {
                 notes: 'pode deletar heroi',
                 validate: {
                     failAction,
+                    headers,
                     params: {
                         id: Joi.string().required()
                     }

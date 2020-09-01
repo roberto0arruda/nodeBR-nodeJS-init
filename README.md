@@ -34,7 +34,7 @@ docker run -it \
 
 ```
 
-* Go to `http://localhost:8000/?pgsql=postgres&username=roberto&db=heroes&ns=public` 
+* Go to `http://localhost:8000/?pgsql=postgres&username=roberto&db=heroes&ns=public`
 
 ---
 
