@@ -1,7 +1,12 @@
 const Hapi = require('hapi')
-const Context = require('./db/strategies/base/contextStrategy')
-const MongoDb = require('./db/strategies/mongodb/mongoDBStrategy')
+const contextStrategy = require('./db/strategies/base/contextStrategy')
+
+const MongoDBStrategy = require('./db/strategies/mongodb/mongoDBStrategy')
 const HeroiSchema = require('./db/strategies/mongodb/schemas/heroiSchema')
+
+const PostgresSQLStrategy = require('./db/strategies/postgres/postgresSQLStrategy')
+const UsuarioSchema = require('./db/strategies/postgres/schemas/UsuarioSchema')
+
 const HeroRoute = require('./routes/heroRoutes')
 const AuthRoute = require('./routes/authRoutes')
 
@@ -21,8 +26,13 @@ function mapRoutes (instance, methods) {
 }
 
 async function main () {
-    const connection = MongoDb.connect()
-    const context = new Context(new MongoDb(connection, HeroiSchema))
+    const mongoConnection = MongoDBStrategy.connect()
+    const contextMongo = new contextStrategy(new MongoDBStrategy(mongoConnection, HeroiSchema))
+
+    const postgresConnection = await PostgresSQLStrategy.connect()
+    const model = await PostgresSQLStrategy.defineModel(postgresConnection, UsuarioSchema)
+    const contextPostgres = new contextStrategy(new PostgresSQLStrategy(postgresConnection, model))
+
 
     const SwaggerOptions = {
         info: {
@@ -46,7 +56,16 @@ async function main () {
         // options: {
         //     expiresIn: 20
         // },
-        validate: (dado, request) => {
+        validate: async (dado, request) => {
+            const [result] = await contextPostgres.read({
+                id: dado.id,
+                username: dado.username.toLowerCase()
+            })
+            if (!result) {
+                return {
+                    isValid: false
+                }
+            }
             // verifica no banco se o usuário continua ativo
             // verifica no banco se o usuário continua pagando
             return {
@@ -58,8 +77,8 @@ async function main () {
     server.auth.default('jwt')
 
     server.route([
-        ...mapRoutes(new HeroRoute(context), HeroRoute.methods()),
-        ...mapRoutes(new AuthRoute(JWT_SECRET), AuthRoute.methods())
+        ...mapRoutes(new HeroRoute(contextMongo), HeroRoute.methods()),
+        ...mapRoutes(new AuthRoute(JWT_SECRET, contextPostgres), AuthRoute.methods())
     ])
 
     await server.start()
