@@ -10,7 +10,7 @@ const MOCK_HEROI_CADASTRAR = {
 
 let contextPostgres = {}
 
-describe('Postgres Strategy', function () {
+describe('PostgresSQLStrategy test Suite', function () {
     this.timeout(Infinity)
     this.beforeAll(async function () {
         const connection = await PostgresSQLStrategy.connect()

@@ -14,7 +14,7 @@ class MongoDB extends ICrud {
         this._connection = connection
     }
 
-    async isConnected() {
+    async isConnected () {
         const state = STATUS[this._connection.readyState]
 
         if (state !== 'Conectando') return state
@@ -23,7 +23,7 @@ class MongoDB extends ICrud {
         return STATUS[this._connection.readyState]
     }
 
-    static connect() {
+    static connect () {
         Mongoose.connect('mongodb://roberto:minhasenhasecreta@localhost:27017/heroes', {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -36,22 +36,22 @@ class MongoDB extends ICrud {
 
         const connection = Mongoose.connection
 
-        return connection.once('open', () => console.log('MONGO DB database rodando!'))
+        return connection.once('open', () => console.log('database rodando!'))
     }
 
-    create(item) {
+    create (item) {
         return this._schema.create(item)
     }
 
-    read(item, skip = 0, limit = 10) {
+    read (item, skip = 0, limit = 10) {
         return this._schema.find(item).skip(skip).limit(limit)
     }
 
-    update(id, item) {
+    update (id, item) {
         return this._schema.updateOne({ _id: id }, { $set: item })
     }
 
-    delete(id) {
+    delete (id) {
         return this._schema.deleteOne({ _id: id })
     }
 }

@@ -17,13 +17,15 @@ let MOCK_HEROI_ID = ''
 
 let contextMongo = {}
 
-describe('MongoDB Suite de Testes', function () {
+describe('MongoDBStrategy Test Suite', function () {
     this.beforeAll(async () => {
         const connection = MongoDBStrategy.connect()
         contextMongo = new contextStrategy(new MongoDBStrategy(connection, HeroiSchema))
 
         const result = await contextMongo.create(MOCK_HEROI_ATUALIZAR)
         MOCK_HEROI_ID = result._id
+
+        console.log('contextMongo', contextMongo)
     })
 
     it('verificar conexao', async () => {
