@@ -4,7 +4,8 @@
   "description": "### DATABASES",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/tests/*.test.js"
+    "test": "mocha --timeout 10000 src/tests/*.test.js",
+    "test:prod": "cross-env NODE_ENV=production npm test"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +13,7 @@
   "dependencies": {
     "bcrypt": "^5.0.0",
     "boom": "^7.3.0",
+    "dotenv": "^8.2.0",
     "hapi": "^18.1.0",
     "hapi-auth-jwt2": "^10.1.0",
     "hapi-swagger": "^9.1.3",
