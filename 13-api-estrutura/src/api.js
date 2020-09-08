@@ -21,6 +21,7 @@ const UsuarioSchema = require('./db/strategies/postgres/schemas/UsuarioSchema')
 
 const HeroRoute = require('./routes/heroRoutes')
 const AuthRoute = require('./routes/authRoutes')
+const UtilRoute = require('./routes/utilRoutes')
 
 const HapiSwagger = require('hapi-swagger')
 const Inert = require('inert')
@@ -90,7 +91,8 @@ async function main () {
 
     server.route([
         ...mapRoutes(new HeroRoute(contextMongo), HeroRoute.methods()),
-        ...mapRoutes(new AuthRoute(JWT_SECRET, contextPostgres), AuthRoute.methods())
+        ...mapRoutes(new AuthRoute(JWT_SECRET, contextPostgres), AuthRoute.methods()),
+        ...mapRoutes(new UtilRoute(), UtilRoute.methods())
     ])
 
     await server.start()
