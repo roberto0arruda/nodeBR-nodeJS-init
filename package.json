@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=html mocha --timeout 10000 --exit src/tests/*.test.js",
-    "test:prod": "cross-env NODE_ENV=production npm test"
+    "test:prod": "cross-env NODE_ENV=production npm test",
+    "start": "node src/api.js"
   },
   "keywords": [],
   "author": "",
