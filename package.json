@@ -2,12 +2,11 @@
   "name": "13-api-estrutura",
   "version": "1.0.0",
   "description": "### DATABASES",
-  "main": "index.js",
+  "main": "src/api.js",
   "scripts": {
     "postinstall": "npm run test",
     "test": "nyc --reporter=html mocha --timeout 10000 --exit src/tests/*.test.js",
-    "test:prod": "cross-env NODE_ENV=production npm test",
-    "start": "node src/api.js"
+    "test:prod": "cross-env NODE_ENV=production npm test"
   },
   "keywords": [],
   "author": "roberto0arruda",
@@ -31,5 +30,8 @@
   },
   "devDependencies": {
     "mocha": "^7.0.1"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }
