@@ -4,12 +4,13 @@
   "description": "### DATABASES",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run test",
     "test": "nyc --reporter=html mocha --timeout 10000 --exit src/tests/*.test.js",
     "test:prod": "cross-env NODE_ENV=production npm test",
     "start": "node src/api.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "roberto0arruda",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
